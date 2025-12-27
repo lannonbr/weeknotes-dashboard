@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weeknotes Collector</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="routePrefix" content="/{{ routePrefix }}" />
+    <link rel="stylesheet" href="/{{ routePrefix }}/css/style.css" />
+    <script src="/{{ routePrefix }}/js/main.js" defer></script>
+  </head>
+  <body>
+    <main class="min-h-screen">
+      <div class="max-w-4xl mx-auto px-8 py-12">
+        <header class="mb-8">
+          <h1 class="text-4xl font-bold text-white mb-2">Weekly Note</h1>
+          <p class="text-gray-500">Curate your weekly discoveries</p>
+        </header>
+
+        <section class="mb-12">
+          <header class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-8 bg-emerald-500 rounded-full"></div>
+            <h2 class="text-2xl font-bold text-white">Create</h2>
+          </header>
+
+          <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+            {% for link in links.create %}
+            <article
+              data-link-id="{{ link.id }}"
+              class="link-item group px-2 border-b border-gray-800 py-4 hover:bg-gray-800/50 transition-all duration-200"
+            >
+              <div class="flex items-start gap-3">
+                <div class="flex-1 min-w-0">
+                  <a
+                    href="{{ link.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-400 font-semibold hover:text-blue-300 flex items-center gap-2 mb-2 break-all transition-colors"
+                  >
+                    {{ link.description }}
+                  </a>
+
+                  <p class="text-gray-400 text-sm leading-relaxed">
+                    {{ link.url }}
+                  </p>
+                </div>
+                <button
+                  class="delete-link-btn pb-2 text-gray-400 border border-b border-transparent border-b-red-400 transition-colors shrink-0 mt-1"
+                >
+                  🗑️ Delete
+                </button>
+              </div>
+            </article>
+            {% endfor %}
+
+            <button
+              data-type="create"
+              class="add-link-btn flex items-center gap-2 text-gray-500 hover:text-gray-300 py-4 w-full transition-colors group"
+            >
+              <span
+                class="text-emerald-500 group-hover:text-emerald-400 transition-colors"
+                >+</span
+              >
+              <span class="font-medium">Add Link</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="mb-12">
+          <header class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-8 bg-blue-500 rounded-full"></div>
+            <h2 class="text-2xl font-bold text-white">Consume</h2>
+          </header>
+
+          <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+            {% for link in links.consume %}
+            <article
+              data-link-id="{{ link.id }}"
+              class="link-item group px-2 border-b border-gray-800 py-4 hover:bg-gray-800/50 transition-all duration-200"
+            >
+              <div class="flex items-start gap-3">
+                <div class="flex-1 min-w-0">
+                  <a
+                    href="{{ link.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-400 font-semibold hover:text-blue-300 flex items-center gap-2 mb-2 break-all transition-colors"
+                  >
+                    {{ link.description }}
+                  </a>
+
+                  <p class="text-gray-400 text-sm leading-relaxed">
+                    {{ link.url }}
+                  </p>
+                </div>
+                <button
+                  class="delete-link-btn pb-2 text-gray-400 border border-b border-transparent border-b-red-400 transition-colors shrink-0 mt-1"
+                >
+                  🗑️ Delete
+                </button>
+              </div>
+            </article>
+            {% endfor %}
+
+            <button
+              data-type="consume"
+              class="add-link-btn flex items-center gap-2 text-gray-500 hover:text-gray-300 py-4 w-full transition-colors group"
+            >
+              <span
+                class="text-emerald-500 group-hover:text-emerald-400 transition-colors"
+                >+</span
+              >
+              <span class="font-medium">Add Link</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="flex gap-3">
+          <button
+            class="export-btn px-8 py-3 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-500 transition-colors"
+          >
+            Export
+          </button>
+          <button
+            class="clear-btn px-8 py34 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-500 transition-colors"
+          >
+            Clear
+          </button>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
