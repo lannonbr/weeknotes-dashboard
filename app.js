@@ -22,10 +22,6 @@ function buildClientsideAssets() {
     fs.mkdirSync(publicPath);
   }
 
-  fs.cpSync(path.join(staticsPath, "css"), path.join(publicPath, "css"), {
-    recursive: true,
-  });
-
   execSync(
     "npx tailwindcss -i ./statics/css/style.css -o ./public/css/style.css"
   );
