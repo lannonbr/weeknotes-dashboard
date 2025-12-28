@@ -2,14 +2,16 @@ import fastify from "fastify";
 import fastifyView from "@fastify/view";
 import fastifyStatic from "@fastify/static";
 import fastifyFormbody from "@fastify/formbody";
+
 import { Liquid } from "liquidjs";
+import webpack from "webpack";
+
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import webpack from "webpack";
-import { execSync } from "node:child_process";
+import url from "node:url";
+import childProcess from "node:child_process";
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const viewsPath = path.join(__dirname, "views");
 
@@ -17,12 +19,11 @@ const staticsPath = path.join(__dirname, "statics");
 const publicPath = path.join(__dirname, "public");
 
 function buildClientsideAssets() {
-  // copy files from staticsPath to publicPath, make publicPath if it doesn't exist yet
   if (!fs.existsSync(publicPath)) {
     fs.mkdirSync(publicPath);
   }
 
-  execSync(
+  childProcess.execSync(
     "npx tailwindcss -i ./statics/css/style.css -o ./public/css/style.css"
   );
 
