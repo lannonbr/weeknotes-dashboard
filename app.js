@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import fastifyView from "@fastify/view";
 import fastifyStatic from "@fastify/static";
+import fastifyFormbody from "@fastify/formbody";
 import { Liquid } from "liquidjs";
 import fs from "node:fs";
 import path from "node:path";
@@ -80,6 +81,8 @@ app.register(fastifyView, {
   },
 });
 
+app.register(fastifyFormbody);
+
 app.get(getRoutePath(), (req, reply) => {
   // TODO: Replace mock data with content from database
   let links = {
@@ -103,6 +106,9 @@ app.get(getRoutePath("links"), (req, reply) => {
 
 app.post(getRoutePath("create"), (req, reply) => {
   // Create a new link
+  const { type, url, description } = req.body;
+
+  reply.redirect(getRoutePath());
 });
 
 app.post(getRoutePath("delete"), (req, reply) => {

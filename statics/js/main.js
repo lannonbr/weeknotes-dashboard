@@ -22,6 +22,8 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
 
     let type = thisBtn.getAttribute("data-type");
 
+    form.setAttribute("autocomplete", "off");
+
     form.method = "POST";
     form.action = `${routePrefix}/create`;
 
@@ -35,13 +37,15 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
             <input
               name="url"
               type="url"
+              required="true"
               placeholder="Link URL"
-              class="w-full bg-transparent text-blue-400 font-semibold mb-3 focus:outline-none placeholder-gray-600"
+              class="w-full bg-transparent text-gray-300 font-semibold mb-3 focus:outline-none placeholder-gray-600"
               autoFocus
             />
             <input
               name="description"
               type="text"
+              required="true"
               placeholder="Description"
               class="w-full bg-transparent text-gray-400 text-sm focus:outline-none placeholder-gray-700"
             />
