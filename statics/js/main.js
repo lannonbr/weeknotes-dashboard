@@ -62,11 +62,12 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
 
     form.querySelector(".cancel-form-btn").addEventListener("click", (e) => {
       form.remove();
+      thisBtn.style.display = "flex";
     });
 
     thisBtn.insertAdjacentElement("beforebegin", form);
 
-    // TODO: remove reference of this button in memory but remove it from the DOM. Upon the form being deleted, remove the button back to the DOM
+    thisBtn.style.display = "none";
   });
 }
 
