@@ -5,11 +5,13 @@ import fastifyFormbody from "@fastify/formbody";
 
 import { Liquid } from "liquidjs";
 import webpack from "webpack";
+import { JSONFilePreset } from "lowdb/node";
 
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import childProcess from "node:child_process";
+import { randomUUID } from "node:crypto";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +19,11 @@ const viewsPath = path.join(__dirname, "views");
 
 const staticsPath = path.join(__dirname, "statics");
 const publicPath = path.join(__dirname, "public");
+
+const db = await JSONFilePreset(path.join(__dirname, "data", "data.json"), {
+  create: [],
+  consume: [],
+});
 
 function buildClientsideAssets() {
   if (!fs.existsSync(publicPath)) {
@@ -81,15 +88,7 @@ app.register(fastifyView, {
 app.register(fastifyFormbody);
 
 app.get(getRoutePath(), (req, reply) => {
-  // TODO: Replace mock data with content from database
-  let links = {
-    create: [
-      { id: "1", description: "Foobar (create)", url: "https://example.com" },
-    ],
-    consume: [
-      { id: "2", description: "Foobar (consume)", url: "https://example.com" },
-    ],
-  };
+  const links = db.data;
 
   return reply.view("./views/index.liquid", {
     links,
@@ -98,22 +97,51 @@ app.get(getRoutePath(), (req, reply) => {
 });
 
 app.get(getRoutePath("links"), (req, reply) => {
-  // get all links
+  const links = db.data;
+
+  return reply.send(links);
 });
 
-app.post(getRoutePath("create"), (req, reply) => {
-  // Create a new link
+app.post(getRoutePath("create"), async (req, reply) => {
   const { type, url, description } = req.body;
+
+  const uuid = randomUUID();
+
+  db.data[type].push({
+    id: uuid,
+    url,
+    description,
+  });
+  await db.write();
 
   reply.redirect(getRoutePath());
 });
 
-app.post(getRoutePath("delete"), (req, reply) => {
-  // Delete a link
+app.post(getRoutePath("delete"), async (req, reply) => {
+  console.log(req.body.id);
+  let inCreateIdx = db.data.create.findIndex(({ id }) => req.body.id === id);
+  console.log({ inCreateIdx });
+  if (inCreateIdx !== -1) {
+    db.data.create.splice(inCreateIdx, 1);
+
+    await db.write();
+    return reply.send({ message: "link deleted" });
+  }
+
+  let inConsumeIdx = db.data.consume.findIndex(({ id }) => req.body.id === id);
+  console.log({ inConsumeIdx });
+  if (inConsumeIdx !== -1) {
+    db.data.consume.splice(inConsumeIdx, 1);
+    await db.write();
+    return reply.send({ message: "link deleted" });
+  }
 });
 
-app.post(getRoutePath("delete-all"), (req, reply) => {
-  // Delete all links
+app.post(getRoutePath("delete-all"), async (req, reply) => {
+  db.data.create = [];
+  db.data.consume = [];
+  await db.write();
+  return reply.send({ message: "Successfully deleted all posts" });
 });
 
 app.listen({ port: 3007, host: "0.0.0.0" }, (err, address) => {

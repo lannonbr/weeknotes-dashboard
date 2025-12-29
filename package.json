@@ -27,7 +27,8 @@
   "description": "A web app that allows me to save links to pages over a week to then be put into a weeknote post at the end of the week",
   "nodemonConfig": {
     "ignore": [
-      "public/"
+      "public/",
+      "data/"
     ],
     "ext": "liquid html js json"
   }

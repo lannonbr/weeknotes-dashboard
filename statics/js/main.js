@@ -2,13 +2,23 @@ const routePrefix = document
   .querySelector("meta[name='routePrefix']")
   .getAttribute("content");
 
-console.log(routePrefix);
-
 for (let btn of document.getElementsByClassName("delete-link-btn")) {
-  btn.addEventListener("click", (e) => {
-    // Delete this link
-    // TODO replace with likely a POST call to delete the given link via the ID
-    e.target.parentElement.parentElement.remove();
+  btn.addEventListener("click", async (e) => {
+    let linkArticleElement = e.target.parentElement.parentElement;
+
+    let linkId = linkArticleElement.getAttribute("data-link-id");
+
+    console.log(`Going to delete ${linkId}`);
+
+    await fetch(`${routePrefix}/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: linkId }),
+    });
+
+    linkArticleElement.remove();
   });
 }
 
@@ -29,7 +39,6 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
 
     form.className = "px-2 border-b border-gray-800 py-4 bg-gray-800/30";
 
-    // TODO: Update the "Add" button to actually submit the form
     form.innerHTML = `
         <div class="flex items-start gap-3">
           <div class="flex-1">
@@ -75,28 +84,37 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
   });
 }
 
-document.querySelector(".export-btn").addEventListener("click", (e) => {
-  // TODO: Generate initial content of weeknote
-  // Something like the following:
-  /**
-   * ## Things I worked on
-   *
-   * * [create link 1](url)
-   * * [create link 2](url)
-   *
-   * ## Things I consumed
-   *
-   * * [consume link 1](url)
-   * * [consume link 2](url)
-   */
+document.querySelector(".export-btn").addEventListener("click", async (e) => {
+  const links = await fetch(`${routePrefix}/links`).then((resp) => resp.json());
+  console.log(links);
+  await navigator.clipboard.writeText(`## Things I worked on
+
+${links.create
+  .map((link) => {
+    return `- [${link.description}](${link.url})`;
+  })
+  .join("\n")}
+
+## Things I consumed
+
+${links.consume
+  .map((link) => {
+    return `- [${link.description}](${link.url})`;
+  })
+  .join("\n")}`);
+
+  console.log("Saved to clipboard!");
 });
 
-document.querySelector(".clear-btn").addEventListener("click", (e) => {
+document.querySelector(".clear-btn").addEventListener("click", async (e) => {
   const result = confirm("Are you sure you want to clear all links?");
   if (result) {
     document.querySelectorAll(".link-item").forEach((item) => {
       item.remove();
     });
-    // TODO: Send a POST request up to clear the database completely
+
+    await fetch(`${routePrefix}/delete-all`, {
+      method: "POST",
+    });
   }
 });
