@@ -86,7 +86,7 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
 
 document.querySelector(".export-btn").addEventListener("click", async () => {
   const links = await fetch(`${routePrefix}/links`).then((resp) => resp.json());
-  console.log(links);
+
   await navigator.clipboard.writeText(`## Things I worked on
 
 ${links.create

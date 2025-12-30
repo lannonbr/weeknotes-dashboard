@@ -118,9 +118,7 @@ app.post(getRoutePath("create"), async (req, reply) => {
 });
 
 app.post(getRoutePath("delete"), async (req, reply) => {
-  console.log(req.body.id);
   let inCreateIdx = db.data.create.findIndex(({ id }) => req.body.id === id);
-  console.log({ inCreateIdx });
   if (inCreateIdx !== -1) {
     db.data.create.splice(inCreateIdx, 1);
 
@@ -129,7 +127,6 @@ app.post(getRoutePath("delete"), async (req, reply) => {
   }
 
   let inConsumeIdx = db.data.consume.findIndex(({ id }) => req.body.id === id);
-  console.log({ inConsumeIdx });
   if (inConsumeIdx !== -1) {
     db.data.consume.splice(inConsumeIdx, 1);
     await db.write();
