@@ -53,7 +53,7 @@ function buildClientsideAssets() {
   compiler.run();
 }
 
-const routePrefix = process.env.WEEKNOTES_ROUTE_PREFIX;
+const routePrefix = process.env.WEEKNOTES_ROUTE_PREFIX ?? "";
 
 buildClientsideAssets();
 

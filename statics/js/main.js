@@ -1,6 +1,10 @@
-const routePrefix = document
+let routePrefix = document
   .querySelector("meta[name='routePrefix']")
   .getAttribute("content");
+
+if (routePrefix === "/") {
+  routePrefix = "";
+}
 
 for (let btn of document.getElementsByClassName("delete-link-btn")) {
   btn.addEventListener("click", async (e) => {
