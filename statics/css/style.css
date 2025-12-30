@@ -3,3 +3,10 @@
 body {
   @apply bg-gray-950;
 }
+
+.section-accent[data-type="create"] {
+  @apply bg-emerald-500;
+}
+.section-accent[data-type="consume"] {
+  @apply bg-blue-500;
+}
