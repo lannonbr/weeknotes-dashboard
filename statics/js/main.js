@@ -73,7 +73,7 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
           </button>
         </div>`;
 
-    form.querySelector(".cancel-form-btn").addEventListener("click", (e) => {
+    form.querySelector(".cancel-form-btn").addEventListener("click", () => {
       form.remove();
       thisBtn.style.display = "flex";
     });
@@ -84,7 +84,7 @@ for (let btn of document.getElementsByClassName("add-link-btn")) {
   });
 }
 
-document.querySelector(".export-btn").addEventListener("click", async (e) => {
+document.querySelector(".export-btn").addEventListener("click", async () => {
   const links = await fetch(`${routePrefix}/links`).then((resp) => resp.json());
   console.log(links);
   await navigator.clipboard.writeText(`## Things I worked on
@@ -106,7 +106,7 @@ ${links.consume
   console.log("Saved to clipboard!");
 });
 
-document.querySelector(".clear-btn").addEventListener("click", async (e) => {
+document.querySelector(".clear-btn").addEventListener("click", async () => {
   const result = confirm("Are you sure you want to clear all links?");
   if (result) {
     document.querySelectorAll(".link-item").forEach((item) => {
