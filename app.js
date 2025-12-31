@@ -4,7 +4,7 @@ import fastifyStatic from "@fastify/static";
 import fastifyFormbody from "@fastify/formbody";
 
 import { Liquid } from "liquidjs";
-import webpack from "webpack";
+import esbuild from "esbuild";
 import { JSONFilePreset } from "lowdb/node";
 
 import fs from "node:fs";
@@ -25,7 +25,7 @@ const db = await JSONFilePreset(path.join(__dirname, "data", "data.json"), {
   consume: [],
 });
 
-function buildClientsideAssets() {
+async function buildClientsideAssets() {
   if (!fs.existsSync(publicPath)) {
     fs.mkdirSync(publicPath);
   }
@@ -34,28 +34,25 @@ function buildClientsideAssets() {
     "npx tailwindcss -i ./statics/css/style.css -o ./public/css/style.css"
   );
 
-  // build js bundle with webpack
-  const compiler = webpack({
-    entry: path.join(staticsPath, "js", "main.js"),
-    mode: "production",
-    output: {
-      path: path.join(publicPath, "js"),
-      filename: "main.js",
-    },
-    resolve: {
-      alias: {
-        fs: false,
-        path: false,
-      },
-      modules: [path.join(staticsPath, "js"), "node_modules"],
-    },
-  });
-  compiler.run();
+  // build js bundle with esbuild
+  await esbuild
+    .build({
+      entryPoints: [path.join(staticsPath, "js", "main.js")],
+      bundle: true,
+      minify: true, // equivalent to webpack production mode
+      outfile: path.join(publicPath, "js", "main.js"),
+      platform: "browser",
+      external: ["fs", "path"],
+    })
+    .catch((error) => {
+      console.error(`Failed to build JS bundle. Error: ${error}`);
+      process.exit(1);
+    });
 }
 
 const routePrefix = process.env.WEEKNOTES_ROUTE_PREFIX ?? "";
 
-buildClientsideAssets();
+await buildClientsideAssets();
 
 function getRoutePath(path = "") {
   const basePath = routePrefix ? `/${routePrefix}` : "/";

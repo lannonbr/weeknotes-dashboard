@@ -8,12 +8,11 @@
     "@fastify/static": "^9.0.0",
     "@fastify/view": "^11.1.1",
     "@tailwindcss/cli": "^4.1.18",
-    "dayjs": "^1.11.19",
+    "esbuild": "^0.27.2",
     "fastify": "^5.6.2",
     "liquidjs": "^10.24.0",
     "lowdb": "^7.0.1",
-    "tailwindcss": "^4.1.18",
-    "webpack": "^5.104.1"
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "@e18e/eslint-plugin": "^0.1.3",
