@@ -31,7 +31,7 @@ async function buildClientsideAssets() {
   }
 
   childProcess.execSync(
-    "npx tailwindcss -i ./statics/css/style.css -o ./public/css/style.css"
+    "npx tailwindcss -i ./statics/css/style.css -o ./public/css/style.css",
   );
 
   // build js bundle with esbuild
@@ -51,6 +51,7 @@ async function buildClientsideAssets() {
 }
 
 const routePrefix = process.env.WEEKNOTES_ROUTE_PREFIX ?? "";
+const livePage = process.env.WEEKNOTES_LIVE_PAGE ?? "";
 
 await buildClientsideAssets();
 
@@ -90,6 +91,7 @@ app.get(getRoutePath(), (req, reply) => {
   return reply.view("./views/index.liquid", {
     links,
     routePrefix,
+    livePage,
   });
 });
 

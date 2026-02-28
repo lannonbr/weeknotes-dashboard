@@ -17,6 +17,9 @@
             Weeknotes Collector
           </h1>
           <p class="text-gray-500">Save links across the web for curation</p>
+          {% if livePage != "" %}
+          <p class="text-gray-500">Live: <a class="text-white hover:underline" href="{{ livePage }}">{{ livePage }}</a></p>
+          {% endif %}
         </header>
 
         {% comment %}<!-- prettier-ignore -->{% endcomment %}
