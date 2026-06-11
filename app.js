@@ -30,6 +30,11 @@ async function buildClientsideAssets() {
     fs.mkdirSync(publicPath);
   }
 
+  fs.copyFileSync(
+    path.join(staticsPath, "favicon.svg"),
+    path.join(publicPath, "favicon.svg"),
+  );
+
   childProcess.execSync(
     "npx tailwindcss -i ./statics/css/style.css -o ./public/css/style.css",
   );
@@ -63,6 +68,10 @@ function getRoutePath(path = "") {
   return routePrefix ? `/${routePrefix}/${path}` : `/${path}`;
 }
 
+function getAssetBasePath() {
+  return routePrefix ? `/${routePrefix}` : "";
+}
+
 const app = fastify({
   routerOptions: {
     ignoreTrailingSlash: true,
@@ -91,6 +100,7 @@ app.get(getRoutePath(), (req, reply) => {
   return reply.view("./views/index.liquid", {
     links,
     routePrefix,
+    assetBasePath: getAssetBasePath(),
     livePage,
   });
 });
