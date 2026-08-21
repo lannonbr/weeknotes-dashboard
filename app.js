@@ -20,6 +20,10 @@ const viewsPath = path.join(__dirname, "views");
 const staticsPath = path.join(__dirname, "statics");
 const publicPath = path.join(__dirname, "public");
 
+if (!fs.existsSync(path.join(__dirname, "data"))) {
+  fs.mkdirSync(path.join(__dirname, "data"));
+}
+
 const db = await JSONFilePreset(path.join(__dirname, "data", "data.json"), {
   create: [],
   consume: [],
