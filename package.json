@@ -5,12 +5,12 @@
   "type": "module",
   "dependencies": {
     "@fastify/formbody": "^9.0.1",
-    "@fastify/static": "^10.1.7",
+    "@fastify/static": "^10.1.8",
     "@fastify/view": "^12.0.1",
     "@tailwindcss/cli": "^4.3.3",
     "esbuild": "^0.28.2",
     "fastify": "^5.12.7",
-    "liquidjs": "^10.30.0",
+    "liquidjs": "^10.30.1",
     "lowdb": "^7.0.1",
     "tailwindcss": "^4.3.3"
   },
@@ -37,5 +37,10 @@
       "data/"
     ],
     "ext": "liquid html js json"
+  },
+  "allowScripts": {
+    "@parcel/watcher": true,
+    "esbuild": true,
+    "fsevents@2.3.3": true
   }
 }
